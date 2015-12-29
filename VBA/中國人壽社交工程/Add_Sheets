@@ -1,0 +1,21 @@
+Sub zxc()
+   
+'zz = Array("業務行政部", "總經理室", "人力資源部", "總務部", "會計部", "保費規劃部", "系統轉換部", "資訊工程部", "銀行保險行政管理部", "商品發展二部", "商品發展一部", "團體保險部", "法令遵循部", "財務部", "資訊設計部", "資訊治理部", "不動產部", "放款部", "台北客服中心二部", "台北客服中心一部", "客戶申訴部", "業務支援部", "理賠部", "經紀代理部", "銀行保險北區營業部", "理財服務部", "銀行保險通路管理部", "桃竹壽險營業部", "桃竹客服中心", "銀行保險南區營業部", "台中客服中心", "中嘉壽險營業部", "嘉義客服中心", "高雄客服中心", "台南客服中心", "高屏壽險營業部", "花東分公司", "澎湖分公司", "契約部", "北二壽險營業部", "部門公用信箱", "精算二部", "行銷企劃部", "電話服務中心", "保服規劃二部", "保單作業部", "外匯管理部", "業務訓練部", "公共關係部", "精算一部", "稽核部", "證券投資部", "保服規劃一部", "資訊服務部", "業務規劃部", "法務專案部", "資訊開發部", "電子商務技術部", "電子商務部", "法律事務部", "北三壽險營業部", "保單流程管理部", "北一壽險營業部", "國內固定收益部", "國外投資部", "台南壽險營業部", "屏東分公司")
+zz = Array("業務行政部", "總經理室", "人力資源部", "總務部")
+
+For i = 0 To UBound(zz)
+    Sheets("工作表1").Select
+    Sheets(1).Range("$A$1:$D$1295").AutoFilter Field:=4, Criteria1:=zz(i)
+    Range("A1:D1295").Select
+    'Application.CutCopyMode = False
+    Selection.Copy
+    Sheets.Add after:=Sheets(Sheets.Count)
+    Sheets(Sheets.Count).Name = zz(i)
+    'Selection.Copy
+    'Sheets(zz(i)).Select
+     Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    'Sheets.Add after:=Sheets(Sheets.Count)
+    'Sheets(Sheets.Count).Name = zz(i)
+Next
+End Sub

@@ -1,0 +1,69 @@
+Sub 巨集1()
+'
+' 巨集1 巨集
+'
+
+'
+    Dim i As Integer
+    i = 1
+    
+    Do While Cells(1, i) <> "IP"
+        i = i + 1
+    Loop
+    Columns(i).Select
+    Selection.Cut
+    
+    If i < 4 Then
+        Columns("E:E").Select
+    Else
+        Columns("D:D").Select
+    End If
+    Selection.Insert Shift:=xlToLeft
+    Columns("E:E").Select
+    Selection.Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+    Selection.Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+    Selection.Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+    Selection.Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+
+    Columns("D:D").Select
+    
+    Selection.TextToColumns Destination:=Range("D1"), DataType:=xlDelimited, _
+        TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=True, _
+        Semicolon:=False, Comma:=False, Space:=False, Other:=True, OtherChar _
+        :=".", FieldInfo:=Array(Array(1, 1), Array(2, 1), Array(3, 1), Array(4, 1)), _
+        TrailingMinusNumbers:=True
+    Cells.Select
+   ActiveSheet.Sort.SortFields.Clear
+   ActiveSheet.Sort.SortFields.Add Key:=Range("D1:D127"), _
+        SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
+   ActiveSheet.Sort.SortFields.Add Key:=Range("E1:E127"), _
+        SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
+   ActiveSheet.Sort.SortFields.Add Key:=Range("F1:F127"), _
+        SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
+   ActiveSheet.Sort.SortFields.Add Key:=Range("G1:G127"), _
+        SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
+    With ActiveSheet.Sort
+        .SetRange Range("A2:Z999")
+        .Header = xlGuess
+        .MatchCase = False
+        .Orientation = xlTopToBottom
+        .SortMethod = xlPinYin
+        .Apply
+    End With
+    Range("H2").Select
+    ActiveCell.FormulaR1C1 = "=RC[-4]&"".""&RC[-3]&"".""&RC[-2]&"".""&RC[-1]"
+    Range("H2").Select
+    Selection.AutoFill Destination:=Range("H2:H9999")
+    'Range("H2:H127").Select
+    Columns("H:H").Select
+    Selection.Copy
+    ActiveWindow.SmallScroll Down:=-93
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Columns("D:G").Select
+    Application.CutCopyMode = False
+    Selection.Delete Shift:=xlToLeft
+    Cells(1, "D") = "IP"
+End Sub
+
+
