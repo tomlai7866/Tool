@@ -17,15 +17,9 @@ for i in f2.readlines():
 	response = urllib2.urlopen(req)
 	json = response.read()
 	Answer = simplejson.loads(json)
-	print(Answer["md5"])
+	#print(Answer["md5"])
 	try:
 		f1.write(str(Answer["md5"])+' , '+str(Answer["positives"])+' , '+str(Answer["total"])+' , '+str(Answer["permalink"])+"\n")	
 	except :
-		f1.write(i+' , '+'NA \t\n')
+		f1.write(i.rstrip()+' , '+'NA \t\n')
 	time.sleep(16)
-	'''
-	try:
-		f1.write(zz.rstrip()+' , '+str(a['reports'][zz.rstrip()]['positives'])+' , '+str(a['reports'][zz.rstrip()]['total'])+' , '+str(a['reports'][zz.rstrip()]['permalink'])+'\t\n')
-	except :
-		f1.write(zz.rstrip()+' , '+'NA \t\n')
-	'''
