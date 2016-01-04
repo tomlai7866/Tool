@@ -1,0 +1,9 @@
+C:\Users\tomlai\Desktop\Python\Test\11MOBILE_DB_V3.sqlite
+C:\Users\tomlai\Desktop\Python\Test\Copy.txt
+C:\Users\tomlai\Desktop\Python\Test\Copy.txt
+C:\Users\tomlai\Desktop\Python\Test\MOBILE_DB_V3.sqlite
+C:\Users\tomlai\Desktop\Python\Test\zzz.txt
+C:\Users\tomlai\Desktop\Python\Test\新文字文件
+C:\Users\tomlai\Desktop\Python\Test\zz\11MOBILE_DB_V3.sqlite
+C:\Users\tomlai\Desktop\Python\Test\zz\22.sqlite
+C:\Users\tomlai\Desktop\Python\Test\zz\新點陣圖影像.bmp

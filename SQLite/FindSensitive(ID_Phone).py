@@ -13,7 +13,9 @@ except :
 f1=open(path+'\\Find_SQLite.txt','w')
 f2=open(path+'\\Find_ID.txt','w')
 pat=[r'[A-Z][1-2]\d{8}',r'09\d{8}',r'\d{4}-\d{4}-\d{4}-\d{4}',
-r'\d{4}\s\d{4}\s\d{4}\s\d{4}',r'\w+@\w+\.\w+'] 
+r'\d{4}\s\d{4}\s\d{4}\s\d{4}',r'\w+\@\w+\.\w+',r'\(\d{2,4}\)\d{5,8}',
+r'\d{2,4}\-\d{5,8}'
+] 
 
 for dirPath, dirNames, fileNames in os.walk(path):
 	for f in fileNames:
@@ -28,6 +30,6 @@ for dirPath, dirNames, fileNames in os.walk(path):
 					m=re.search(matchrg,c)
 					if m:
 						if PathName=='':
-							f2.write('\n'+str(f)+'2\n\n')
+							f2.write('\n'+str(f)+'\n\n')
 							PathName=a
-						f2.write(m.group().strip()+'1\n')
+						f2.write(m.group().strip()+'\n')

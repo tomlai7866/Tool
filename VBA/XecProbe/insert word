@@ -1,0 +1,239 @@
+Sub Main()
+    movelevel
+
+    'Name of the existing Word doc.
+    Const stWordReport As String = "C:\Users\tomlai\Desktop\zz.docx"
+    
+    'Word objects.
+    Dim wdApp As Word.Application
+    Dim wdDoc As Word.Document
+    Dim wdbmRange As Word.Range
+    
+    'Excel objects.
+    Dim wbBook As Workbook
+    Dim wsSheet As Worksheet
+    Dim rnReport As Range
+    
+    For i = 1 To 3
+        'Initialize the Excel objects.
+        Set wbBook = ThisWorkbook
+        Set wsSheet = wbBook.Worksheets("Level" & i)
+        A_end = "A1:C" & Worksheets("Level" & i).UsedRange.Rows.Count
+        Set rnReport = wsSheet.Range(A_end)
+        'MsgBox (Total_Rnage)
+        'Initialize the Word objets.
+        Set wdApp = New Word.Application
+        Set wdDoc = wdApp.Documents.Open(stWordReport)
+        Set wdbmRange = wdDoc.Bookmarks("L" & i).Range
+        
+        'If the macro has been run before, clean up any artifacts before trying to paste the table in again.
+        On Error Resume Next
+        With wdDoc.InlineShapes(1)
+            .Select
+            .Delete
+        End With
+        On Error GoTo 0
+        
+        'Turn off screen updating.
+        Application.ScreenUpdating = False
+        
+        'Copy the report to the clipboard.
+        rnReport.Copy
+        'Set x = rnReport.Design
+        wdbmRange.Select
+        wdbmRange.Paste
+    
+        With wdDoc
+            .Save
+            .Close
+        End With
+        
+        'Quit Word.
+        wdApp.Quit
+        
+        'Null out your variables.
+        Set wdbmRange = Nothing
+        Set wdDoc = Nothing
+        Set wdApp = Nothing
+        
+        'Clear out the clipboard, and turn screen updating back on.
+        With Application
+            .CutCopyMode = False
+            .ScreenUpdating = True
+        End With
+    Next
+    MsgBox "The report has successfully been " & vbNewLine & _
+           "transferred to " & stWordReport, vbInformation
+
+End Sub
+
+Public Sub format()
+    Columns("A:A").Select
+    Selection.Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+    Range("A1").Select
+    ActiveCell.FormulaR1C1 = "項次"
+    Range("A2").Select
+    ActiveCell.FormulaR1C1 = "1"
+    Range("A3").Select
+    ActiveCell.FormulaR1C1 = "2"
+    Range("A2:A3").Select
+    A_end = "A2:A" & ActiveSheet.UsedRange.Rows.Count
+    Selection.AutoFill Destination:=Range(A_end)
+    Range(A_end).Select
+    Range("A1").Select
+    Total_Rnage = "$A$1:$" & Chr(ActiveSheet.UsedRange.Columns.Count + 97 - 1) & "$" & ActiveSheet.UsedRange.Rows.Count
+    ActiveSheet.ListObjects.Add(xlSrcRange, Range(Total_Rnage), , xlYes).Name = _
+        "表格4"
+    Range(Total_Rnage).Select
+    ActiveSheet.ListObjects("表格4").TableStyle = "TableStyleMedium2"
+    ActiveSheet.ListObjects("表格4").ShowAutoFilterDropDown = False
+    Selection.Borders(xlDiagonalDown).LineStyle = xlNone
+    Selection.Borders(xlDiagonalUp).LineStyle = xlNone
+    With Selection.Borders(xlEdgeLeft)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeRight)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideVertical)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideHorizontal)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    Cells.Select
+    Cells.EntireColumn.AutoFit
+End Sub
+
+Sub movelevel()
+For Level = 1 To 5
+    Sheets(1).Select
+    j = o
+    Do
+        j = j + 1
+        'MsgBox (Cells(1, j))
+    Loop Until Cells(1, j) = "Level"
+    
+    Sheets(1).Range("$A$1:$Z$25532").AutoFilter Field:=j, Criteria1:=Level
+    Range("$A$1:$Z$25532").Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets.Add After:=Sheets(Sheets.Count)
+    Sheets(Sheets.Count).Name = "Level" & Level
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    
+    'IP SORT
+    Dim i As Integer
+    i = 1
+    Do While Cells(1, i) <> "IP"
+        i = i + 1
+    Loop
+    Columns(i).Select
+    Selection.Cut
+    
+    If i < 4 Then
+        Columns("E:E").Select
+    Else
+        Columns("D:D").Select
+    End If
+    Selection.Insert Shift:=xlToLeft
+    Columns("E:E").Select
+    Selection.Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+    Selection.Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+    Selection.Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+    Selection.Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+
+    Columns("D:D").Select
+    
+    Selection.TextToColumns Destination:=Range("D1"), DataType:=xlDelimited, _
+        TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=True, _
+        Semicolon:=False, Comma:=False, Space:=False, Other:=True, OtherChar _
+        :=".", FieldInfo:=Array(Array(1, 1), Array(2, 1), Array(3, 1), Array(4, 1)), _
+        TrailingMinusNumbers:=True
+    Cells.Select
+   ActiveSheet.Sort.SortFields.Clear
+   ActiveSheet.Sort.SortFields.Add Key:=Columns("D"), _
+        SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
+   ActiveSheet.Sort.SortFields.Add Key:=Columns("E"), _
+        SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
+   ActiveSheet.Sort.SortFields.Add Key:=Columns("F"), _
+        SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
+   ActiveSheet.Sort.SortFields.Add Key:=Columns("G"), _
+        SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
+    With ActiveSheet.Sort
+        .SetRange Range("A2:Z999")
+        .Header = xlGuess
+        .MatchCase = False
+        .Orientation = xlTopToBottom
+        .SortMethod = xlPinYin
+        .Apply
+    End With
+    Range("H2").Select
+    ActiveCell.FormulaR1C1 = "=RC[-4]&"".""&RC[-3]&"".""&RC[-2]&"".""&RC[-1]"
+    Range("H2").Select
+    mRanges = "H2:" & "H" & ActiveSheet.UsedRange.Rows.Count
+    On Error Resume Next
+    Selection.AutoFill Destination:=Range(mRanges)
+    'Range("H2:H127").Select
+    Columns("H:H").Select
+    Selection.Copy
+    ActiveWindow.SmallScroll Down:=-93
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Columns("D:G").Select
+    Application.CutCopyMode = False
+    Selection.Delete Shift:=xlToLeft
+    Cells(1, "D") = "IP"
+    'IP SORT
+    format
+Next
+
+Sheets.Add After:=Sheets(Sheets.Count)
+Sheets(Sheets.Count).Name = "Virus"
+
+Path = "C:\Users\tomlai\Desktop\virustotal-search.txt"
+Open Path For Input As #1
+
+rn = 0
+Do Until EOF(1)
+    Line Input #1, r_lines
+    r_lines = Split(r_lines, ",")
+    ActiveCell.Offset(rn, 0).Value = r_lines(0)
+    ActiveCell.Offset(rn, 1).Value = r_lines(1)
+    On Error Resume Next
+    ActiveCell.Offset(rn, 2).Value = r_lines(2)
+    rn = rn + 1
+    
+Loop
+
+Close #1
+End Sub
+
+
+
+

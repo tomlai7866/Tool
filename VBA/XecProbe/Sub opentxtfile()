@@ -1,0 +1,19 @@
+Sub opentxtfile()
+Path = "C:\Users\tomlai\Desktop\virustotal-search.txt"
+
+Open Path For Input As #1
+rn = 0
+
+Do Until EOF(1)
+    Line Input #1, r_lines
+    r_lines = Split(r_lines, ",")
+    ActiveCell.Offset(rn, 0).Value = r_lines(0)
+    ActiveCell.Offset(rn, 1).Value = r_lines(1)
+    On Error Resume Next
+    ActiveCell.Offset(rn, 2).Value = r_lines(2)
+    rn = rn + 1
+    
+Loop
+
+Close #1
+End Sub

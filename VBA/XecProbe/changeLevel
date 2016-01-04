@@ -1,0 +1,101 @@
+Sub movelevel()
+For Level = 1 To 5
+    Sheets(1).Select
+    j = o
+    Do
+        j = j + 1
+        'MsgBox (Cells(1, j))
+    Loop Until Cells(1, j) = "Level"
+    
+    Sheets(1).Range("$A$1:$Z$25532").AutoFilter Field:=j, Criteria1:=Level
+    Range("$A$1:$Z$25532").Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets.Add after:=Sheets(Sheets.Count)
+    Sheets(Sheets.Count).Name = "Level" & Level
+     Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+            Dim i As Integer
+    i = 1
+    
+    Do While Cells(1, i) <> "IP"
+        i = i + 1
+    Loop
+    Columns(i).Select
+    Selection.Cut
+    
+    If i < 4 Then
+        Columns("E:E").Select
+    Else
+        Columns("D:D").Select
+    End If
+    Selection.Insert Shift:=xlToLeft
+    Columns("E:E").Select
+    Selection.Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+    Selection.Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+    Selection.Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+    Selection.Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+
+    Columns("D:D").Select
+    
+    Selection.TextToColumns Destination:=Range("D1"), DataType:=xlDelimited, _
+        TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=True, _
+        Semicolon:=False, Comma:=False, Space:=False, Other:=True, OtherChar _
+        :=".", FieldInfo:=Array(Array(1, 1), Array(2, 1), Array(3, 1), Array(4, 1)), _
+        TrailingMinusNumbers:=True
+    Cells.Select
+   ActiveSheet.Sort.SortFields.Clear
+   ActiveSheet.Sort.SortFields.Add Key:=Columns("D"), _
+        SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
+   ActiveSheet.Sort.SortFields.Add Key:=Columns("E"), _
+        SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
+   ActiveSheet.Sort.SortFields.Add Key:=Columns("F"), _
+        SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
+   ActiveSheet.Sort.SortFields.Add Key:=Columns("G"), _
+        SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
+    With ActiveSheet.Sort
+        .SetRange Range("A2:Z999")
+        .Header = xlGuess
+        .MatchCase = False
+        .Orientation = xlTopToBottom
+        .SortMethod = xlPinYin
+        .Apply
+    End With
+    Range("H2").Select
+    ActiveCell.FormulaR1C1 = "=RC[-4]&"".""&RC[-3]&"".""&RC[-2]&"".""&RC[-1]"
+    Range("H2").Select
+    mRanges = "H2:" & "H" & ActiveSheet.UsedRange.Rows.Count
+    On Error Resume Next
+    Selection.AutoFill Destination:=Range(mRanges)
+    'Range("H2:H127").Select
+    Columns("H:H").Select
+    Selection.Copy
+    ActiveWindow.SmallScroll Down:=-93
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Columns("D:G").Select
+    Application.CutCopyMode = False
+    Selection.Delete Shift:=xlToLeft
+    Cells(1, "D") = "IP"
+Next
+
+Sheets.Add after:=Sheets(Sheets.Count)
+Sheets(Sheets.Count).Name = "Virus"
+
+Path = "C:\Users\tomlai\Desktop\virustotal-search.txt"
+Open Path For Input As #1
+
+rn = 0
+Do Until EOF(1)
+    Line Input #1, r_lines
+    r_lines = Split(r_lines, ",")
+    ActiveCell.Offset(rn, 0).Value = r_lines(0)
+    ActiveCell.Offset(rn, 1).Value = r_lines(1)
+    On Error Resume Next
+    ActiveCell.Offset(rn, 2).Value = r_lines(2)
+    rn = rn + 1
+    
+Loop
+
+Close #1
+End Sub
