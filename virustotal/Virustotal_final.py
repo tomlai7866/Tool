@@ -1,10 +1,14 @@
 import simplejson
 import urllib
 import urllib2
-import time 
+import time
+import os
 
-f1=open("C:\\Users\\tomlai\\Desktop\\Python\\virustotal\\virustotal-search.txt","w")
-f2=open("C:\\Users\\tomlai\\Desktop\\Python\\virustotal\\Tryvirustotal.txt","r")
+FilePath = os.getcwd()
+MD5=FilePath+"/MD5File.txt"
+OutPut= FilePath+"/SearchResult.txt"
+f1=open(OutPut,"w")
+f2=open(MD5,"r")
 
 url = "https://www.virustotal.com/vtapi/v2/file/report"
 
