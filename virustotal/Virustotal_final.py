@@ -1,14 +1,14 @@
 import simplejson
 import urllib
 import urllib2
-import time
+import time 
 import os
+import ctypes
+Current_Path = os.getcwd()
 
-FilePath = os.getcwd()
-MD5=FilePath+"/MD5File.txt"
-OutPut= FilePath+"/SearchResult.txt"
-f1=open(OutPut,"w")
-f2=open(MD5,"r")
+f1=open(Current_Path+"\\SearchResult.txt.txt","w")
+f2=open(Current_Path+"\\MD5File.txt","r")
+
 
 url = "https://www.virustotal.com/vtapi/v2/file/report"
 
@@ -21,9 +21,9 @@ for i in f2.readlines():
 	response = urllib2.urlopen(req)
 	json = response.read()
 	Answer = simplejson.loads(json)
-	#print(Answer["md5"])
 	try:
 		f1.write(str(Answer["md5"])+' , '+str(Answer["positives"])+' , '+str(Answer["total"])+' , '+str(Answer["permalink"])+"\n")	
 	except :
 		f1.write(i.rstrip()+' , '+'NA \t\n')
 	time.sleep(16)
+ctypes.windll.user32.MessageBoxA(0, "Done", "", 0)
